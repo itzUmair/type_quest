@@ -6,4 +6,7 @@
   html {
     @apply font-Poppins;
   }
+  body {
+    @apply bg-clr-600;
+  }
 }

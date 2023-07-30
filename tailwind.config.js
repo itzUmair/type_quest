@@ -12,6 +12,12 @@ export default {
         "clr-600": "#40798C",
       },
     },
+    screens: {
+      mobile: "0px",
+      tablet: "768px",
+      desktop: "1024px",
+      ultra: "2560px",
+    },
   },
   plugins: [],
 };

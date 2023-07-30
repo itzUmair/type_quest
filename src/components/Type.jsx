@@ -32,8 +32,9 @@ const Type = () => {
     getWords();
   }, []);
   return (
-    <div>
-      <p>{test}</p>
+    <div className="flex flex-col content-center items-center h-screen">
+      <p className="text-clr-100 w-fit">{test}</p>
+      <button>Change</button>
     </div>
   );
 };
