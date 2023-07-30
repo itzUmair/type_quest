@@ -10,6 +10,10 @@ export default {
         "clr-100": "#D5DFE5",
         "clr-400": "#FFCF00",
         "clr-600": "#40798C",
+        "clr-690": "#436671",
+      },
+      spacing: {
+        2560: "160rem",
       },
     },
     screens: {

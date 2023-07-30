@@ -1,7 +1,12 @@
-import { Type } from "./components";
+import { Navbar, Type } from "./components";
 
 function App() {
-  return <Type />;
+  return (
+    <>
+      <Navbar />
+      <Type />
+    </>
+  );
 }
 
 export default App;
