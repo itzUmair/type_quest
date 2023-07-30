@@ -14,6 +14,7 @@ export default {
       },
       spacing: {
         2560: "160rem",
+        "60vh": "60vh",
       },
     },
     screens: {

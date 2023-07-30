@@ -22,8 +22,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex justify-between items-center tablet:px-16 py-4 text-clr-100 ultra:w-2560 ultra:mx-auto">
-      <p className="font-bold text-clr-400 text-2xl">Type Quest</p>
+    <nav className="flex justify-between items-center mobile:px-4 mobile:py-2 tablet:px-16 tablet:py-4 text-clr-100 ultra:w-2560 ultra:mx-auto">
+      <p className="font-bold text-clr-400 mobile:text-xl tablet:text-2xl">
+        Type Quest
+      </p>
       <div className="flex">
         {isLogin ? (
           <ul className="flex gap-4">
