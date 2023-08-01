@@ -42,10 +42,8 @@ const Type = () => {
     const letterDisplay = document.querySelector("#test-container");
     const currentKeyIndex = keysDown.length;
     const currentLetter = test[currentKeyIndex];
-
     if (currentKeyIndex === 0 && startTimeRef.current === 0) {
       startTimeRef.current = Date.now();
-      console.log(startTimeRef);
     }
 
     if (e.key === "Backspace") {
@@ -53,6 +51,8 @@ const Type = () => {
       const removed = tempArray.pop();
       if (removed === test[currentKeyIndex - 1]) {
         setTestStats({ ...testStats, correct: testStats.correct - 1 });
+      } else {
+        setTestStats({ ...testStats, left: testStats.left - 1 });
       }
       setKeysDown((prevArray) => prevArray.slice(0, -1));
       letterDisplay.children[currentKeyIndex - 1].style.color =
@@ -63,7 +63,11 @@ const Type = () => {
       setTestStats({ ...testStats, correct: testStats.correct + 1 });
     } else {
       letterDisplay.children[currentKeyIndex].style.color = "red";
-      setTestStats({ ...testStats, mistakes: testStats.mistakes + 1 });
+      setTestStats({
+        ...testStats,
+        mistakes: testStats.mistakes + 1,
+        left: testStats.left + 1,
+      });
     }
     setKeysDown((prevKeys) => [...prevKeys, e.key]);
     if (keysDown.length + 1 === letterDisplay.children.length) {
@@ -183,7 +187,11 @@ const Type = () => {
         </>
       </CSSTransition>
       <CSSTransition in={isTestComplete} timeout={100} unmountOnExit>
-        <Results testStats={testStats} />
+        <Results
+          testStats={testStats}
+          testConfig={testConfig}
+          setIsTestComplete={setIsTestComplete}
+        />
       </CSSTransition>
     </>
   );
