@@ -16,6 +16,9 @@ export default {
         2560: "160rem",
         "60vh": "60vh",
       },
+      fontSize: {
+        "2xs": "0.6rem",
+      },
     },
     screens: {
       mobile: "0px",

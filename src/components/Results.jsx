@@ -1,7 +1,24 @@
+import { useEffect } from "react";
+
 const Results = ({ testStats, testConfig, setIsTestComplete }) => {
   const seconds = (testStats.endTime - testStats.startTime) / 1000;
   const minutes = seconds / 60;
   const WPM = testConfig.length / minutes;
+
+  const listenForShortcuts = (e) => {
+    if (e.key === "Enter") {
+      setIsTestComplete(false);
+    }
+
+    if (e.key === "Shift") {
+      setIsTestComplete(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", listenForShortcuts);
+    return () => window.removeEventListener("keydown", listenForShortcuts);
+  });
   return (
     <div className="flex gap-8 flex-col justify-center items-center h-60vh">
       <div className="grid gap-2 grid-rows-2 grid-cols-5 max-w-3xl h-50 text-center">
@@ -34,9 +51,16 @@ const Results = ({ testStats, testConfig, setIsTestComplete }) => {
           {Math.round(seconds)}s
         </p>
       </div>
-      <div>
-        <button onClick={() => setIsTestComplete(false)}>Next test</button>
-        <button>Test settings</button>
+      <div className="flex gap-4">
+        <button
+          onClick={() => setIsTestComplete(false)}
+          className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none flex flex-col items-center"
+        >
+          Next test <span className="text-2xs">(enter)</span>
+        </button>
+        <button className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none flex flex-col items-center">
+          Test settings <span className="text-2xs">(shift)</span>
+        </button>
       </div>
     </div>
   );
