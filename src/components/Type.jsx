@@ -2,13 +2,13 @@ import { useEffect, useState, useRef } from "react";
 import { database } from "../firebase/firebase.config.js";
 import { doc, getDoc } from "firebase/firestore";
 import { CSSTransition } from "react-transition-group";
-import { Results } from "../components";
+import { Results, TestConfig } from "../components";
 
 const Type = () => {
   const [test, setTest] = useState("");
   const [wordsList, setWordsList] = useState([]);
   const [keysDown, setKeysDown] = useState([]);
-  // const [isUpdateSetting, setIsUpdateSetting] = useState(false);
+  const [isUpdateSetting, setIsUpdateSetting] = useState(false);
   const [regenTest, setRegenTest] = useState(0);
   const [isTestComplete, setIsTestComplete] = useState(false);
   const regenRef = useRef(null);
@@ -111,7 +111,7 @@ const Type = () => {
       startTime: 0,
       endTime: 0,
     });
-  }, [regenTest]);
+  }, [regenTest, testConfig]);
 
   useEffect(() => {
     setTestStats({
@@ -174,14 +174,14 @@ const Type = () => {
       <CSSTransition
         in={!isTestComplete}
         timeout={300}
-        classNames="fade-one"
+        classNames="fade"
         unmountOnExit
       >
         <>
           <div className="flex flex-col justify-center items-center h-60vh">
             <div
               id="test-container"
-              className="text-clr-100/40 w-fit mobile:text-2xl mobile:px-4 tablet:text-3xl my-8 tablet:px-16 flex"
+              className="text-clr-100/40 w-fit mobile:text-2xl mobile:px-4 tablet:text-3xl my-4 tablet:px-16 flex flex-wrap"
             >
               {test.split("").map((letter, index) => (
                 <p
@@ -201,7 +201,7 @@ const Type = () => {
                 restart test
               </button>
               <button
-                onClick={() => setRegenTest((prev) => prev + 1)}
+                onClick={() => setIsUpdateSetting((prevState) => !prevState)}
                 className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none"
               >
                 test settings
@@ -213,13 +213,25 @@ const Type = () => {
       <CSSTransition
         in={isTestComplete}
         timeout={300}
-        classNames="fade-two"
+        classNames="fade"
         unmountOnExit
       >
         <Results
           testStats={testStats}
           testConfig={testConfig}
           setIsTestComplete={setIsTestComplete}
+        />
+      </CSSTransition>
+      <CSSTransition
+        in={isUpdateSetting}
+        timeout={300}
+        classNames="fade"
+        unmountOnExit
+      >
+        <TestConfig
+          testConfig={testConfig}
+          setIsUpdateSetting={setIsUpdateSetting}
+          setTestConfig={setTestConfig}
         />
       </CSSTransition>
     </div>
