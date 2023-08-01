@@ -150,6 +150,25 @@ const Type = () => {
     getWords();
   }, []);
 
+  useEffect(() => {
+    if (!isTestComplete) {
+      const wordsArray = [...wordsList];
+      generateTest(testConfig.length, wordsArray);
+      setTestStats({
+        mistakes: 0,
+        correct: 0,
+        acc: 0,
+        char: 0,
+        left: 0,
+        startTime: 0,
+        endTime: 0,
+      });
+      startTimeRef.current = 0;
+      endTimeRef.current = 0;
+      setKeysDown([]);
+    }
+  }, [isTestComplete]);
+
   return (
     <>
       <CSSTransition in={!isTestComplete} timeout={100} unmountOnExit>
