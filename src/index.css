@@ -11,3 +11,39 @@
     /* color: #436671; */
   }
 }
+
+.fade-one-enter {
+  opacity: 0;
+}
+
+.fade-one-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-one-exit {
+  opacity: 1;
+}
+
+.fade-one-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.fade-two-enter {
+  opacity: 0;
+}
+
+.fade-two-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-two-exit {
+  opacity: 1;
+}
+
+.fade-two-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}

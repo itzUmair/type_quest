@@ -170,8 +170,13 @@ const Type = () => {
   }, [isTestComplete]);
 
   return (
-    <>
-      <CSSTransition in={!isTestComplete} timeout={100} unmountOnExit>
+    <div className="tablet:overflow-y-hidden tablet:max-h-60vh">
+      <CSSTransition
+        in={!isTestComplete}
+        timeout={300}
+        classNames="fade-one"
+        unmountOnExit
+      >
         <>
           <div className="flex flex-col justify-center items-center h-60vh">
             <div
@@ -205,14 +210,19 @@ const Type = () => {
           </div>
         </>
       </CSSTransition>
-      <CSSTransition in={isTestComplete} timeout={100} unmountOnExit>
+      <CSSTransition
+        in={isTestComplete}
+        timeout={300}
+        classNames="fade-two"
+        unmountOnExit
+      >
         <Results
           testStats={testStats}
           testConfig={testConfig}
           setIsTestComplete={setIsTestComplete}
         />
       </CSSTransition>
-    </>
+    </div>
   );
 };
 
