@@ -6,6 +6,7 @@ import { Results } from "../components";
 
 const Type = () => {
   const [test, setTest] = useState("");
+  const [wordsList, setWordsList] = useState([]);
   const [keysDown, setKeysDown] = useState([]);
   // const [isUpdateSetting, setIsUpdateSetting] = useState(false);
   const [regenTest, setRegenTest] = useState(0);
@@ -94,11 +95,8 @@ const Type = () => {
   };
 
   useEffect(() => {
-    const getWords = async () => {
-      const response = await getDoc(docRef);
-      generateTest(testConfig.length, response.data().words);
-    };
-    getWords();
+    const wordsArray = [...wordsList];
+    generateTest(testConfig.length, wordsArray);
     regenRef.current.blur();
     setTestStats({
       mistakes: 0,
@@ -138,6 +136,15 @@ const Type = () => {
     });
     setIsTestComplete(true);
   };
+
+  useEffect(() => {
+    const getWords = async () => {
+      const response = await getDoc(docRef);
+      setWordsList(response.data().words);
+      generateTest(testConfig.length, response.data().words);
+    };
+    getWords();
+  }, []);
 
   return (
     <>
