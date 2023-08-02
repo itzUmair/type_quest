@@ -30,18 +30,28 @@ const Type = () => {
   const docRef = doc(database, "words", "words_list");
 
   const resetColors = () => {
-    const letterDisplay = document.querySelector("#test-container");
+    const letterDisplay = document.querySelectorAll(".letters");
+    console.log(letterDisplay);
     const originalColor = "rgba(213, 223, 219, 0.4)";
-
-    for (let index = 0; index < letterDisplay.children.length; index++) {
-      letterDisplay.children[index].style.color = originalColor;
+    for (let index = 0; index < letterDisplay.length; index++) {
+      letterDisplay[index].style.color = originalColor;
+      letterDisplay[index].style.backgroundColor = "transparent";
     }
   };
 
   const checkKeyDown = (e) => {
-    const letterDisplay = document.querySelector("#test-container");
+    const letterDisplay = document.querySelectorAll(".letters");
     const currentKeyIndex = keysDown.length;
     const currentLetter = test[currentKeyIndex];
+
+    if (currentLetter === " " && e.key !== " " && e.key !== "Backspace") {
+      letterDisplay[currentKeyIndex].style.backgroundColor = "red";
+      setTestStats({
+        ...testStats,
+        mistakes: testStats.mistakes + 1,
+        left: testStats.left + 1,
+      });
+    }
     if (currentKeyIndex === 0 && startTimeRef.current === 0) {
       startTimeRef.current = Date.now();
     }
@@ -55,14 +65,14 @@ const Type = () => {
         setTestStats({ ...testStats, left: testStats.left - 1 });
       }
       setKeysDown((prevArray) => prevArray.slice(0, -1));
-      letterDisplay.children[currentKeyIndex - 1].style.color =
-        "rgba(213,223,219, 0.4)";
+      letterDisplay[keysDown.length - 1].style.color = "rgba(213,223,219, 0.4)";
+      letterDisplay[keysDown.length - 1].style.backgroundColor = "transparent";
       return;
     } else if (e.key === currentLetter) {
-      letterDisplay.children[currentKeyIndex].style.color = "#D5DFE5";
+      letterDisplay[currentKeyIndex].style.color = "#D5DFE5";
       setTestStats({ ...testStats, correct: testStats.correct + 1 });
     } else {
-      letterDisplay.children[currentKeyIndex].style.color = "red";
+      letterDisplay[currentKeyIndex].style.color = "red";
       setTestStats({
         ...testStats,
         mistakes: testStats.mistakes + 1,
@@ -70,7 +80,7 @@ const Type = () => {
       });
     }
     setKeysDown((prevKeys) => [...prevKeys, e.key]);
-    if (keysDown.length + 1 === letterDisplay.children.length) {
+    if (keysDown.length + 1 === test.length) {
       testComplete();
       return;
     }
@@ -179,17 +189,19 @@ const Type = () => {
       >
         <>
           <div className="flex flex-col justify-center items-center h-60vh">
-            <div
-              id="test-container"
-              className="text-clr-100/40 w-fit mobile:text-2xl mobile:px-4 tablet:text-3xl my-4 tablet:px-16 flex flex-wrap"
-            >
-              {test.split("").map((letter, index) => (
-                <p
-                  key={index}
-                  className="transition-colors duration-100 ease-in"
-                >
-                  {letter === " " ? "\u00A0" : letter}
-                </p>
+            <div className="text-clr-100/40 tablet:w-10/12 mobile:text-2xl mobile:px-4 tablet:text-3xl my-4 tablet:px-16 flex flex-wrap justify-center">
+              {test.split(" ").map((word, index) => (
+                <span key={index} className="flex flex-wrap">
+                  {word.split("").map((letter, index) => (
+                    <p
+                      key={index}
+                      className="transition-colors duration-100 ease-in letters"
+                    >
+                      {letter === " " ? "\u00A0" : letter}
+                    </p>
+                  ))}
+                  <p className="letters">{"\u00A0"}</p>
+                </span>
               ))}
             </div>
             <div className="flex gap-4">
