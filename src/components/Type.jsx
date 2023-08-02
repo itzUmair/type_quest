@@ -24,14 +24,13 @@ const Type = () => {
     endTime: 0,
   });
   const [testConfig, setTestConfig] = useState({
-    length: 5,
+    length: 20,
     mode: "normal",
   });
   const docRef = doc(database, "words", "words_list");
 
   const resetColors = () => {
     const letterDisplay = document.querySelectorAll(".letters");
-    console.log(letterDisplay);
     const originalColor = "rgba(213, 223, 219, 0.4)";
     for (let index = 0; index < letterDisplay.length; index++) {
       letterDisplay[index].style.color = originalColor;

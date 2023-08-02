@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase.config.js";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import Logo from "../assets/logo.svg";
 
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -23,7 +24,8 @@ const Navbar = () => {
 
   return (
     <nav className="flex justify-between items-center mobile:px-4 mobile:py-2 tablet:px-16 tablet:py-4 text-clr-100 ultra:w-2560 ultra:mx-auto">
-      <p className="font-bold text-clr-400 mobile:text-xl tablet:text-2xl">
+      <p className="font-bold text-clr-400 mobile:text-xl tablet:text-2xl flex gap-4">
+        <img src={Logo} alt="" className="w-8" />
         Type Quest
       </p>
       <div className="flex">
