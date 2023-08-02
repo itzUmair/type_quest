@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { database } from "../firebase/firebase.config.js";
 import { doc, getDoc } from "firebase/firestore";
 import { CSSTransition } from "react-transition-group";
-import { Results, TestConfig } from "../components";
+import { Results, TestConfig, Loader } from "../components";
 
 const Type = () => {
   const [test, setTest] = useState("");
@@ -15,6 +15,7 @@ const Type = () => {
   const regenRef = useRef(null);
   const startTimeRef = useRef(0);
   const endTimeRef = useRef(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [testStats, setTestStats] = useState({
     mistakes: 0,
     correct: 0,
@@ -112,7 +113,7 @@ const Type = () => {
   useEffect(() => {
     const wordsArray = [...wordsList];
     generateTest(testConfig.length, wordsArray);
-    regenRef.current.blur();
+    regenRef.current?.blur();
     setTestStats({
       mistakes: 0,
       correct: 0,

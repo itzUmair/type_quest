@@ -1,4 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, database } from "../firebase/firebase.config.js";
+import { useNavigate } from "react-router-dom";
+import { collection, doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 const Results = ({
   testStats,
@@ -7,9 +11,11 @@ const Results = ({
   setIsUpdateSetting,
   setIsTestStarted,
 }) => {
+  const [isLoggedin, setIsLoggedin] = useState(null);
   const seconds = (testStats.endTime - testStats.startTime) / 1000;
   const minutes = seconds / 60;
   const WPM = testConfig.length / minutes;
+  const navigate = useNavigate();
 
   const listenForShortcuts = (e) => {
     if (e.key === "Enter") {
@@ -25,6 +31,32 @@ const Results = ({
     window.addEventListener("keydown", listenForShortcuts);
     return () => window.removeEventListener("keydown", listenForShortcuts);
   });
+
+  const updateResults = (uid) => {
+    const pushResults = async (uid) => {
+      const userDocRef = doc(database, "users", uid);
+
+      try {
+        await updateDoc(userDocRef, {
+          results: arrayUnion({
+            ...testStats,
+            ...testConfig,
+          }),
+        });
+      } catch (error) {
+        console.error("Error adding new item to the array:", error);
+      }
+    };
+    pushResults(uid);
+  };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setIsLoggedin(user.uid);
+      updateResults(user.uid);
+    });
+  }, []);
+
   return (
     <div className="flex gap-8 flex-col justify-center items-center h-60vh">
       <div className="grid gap-2 grid-rows-2 grid-cols-5 max-w-3xl h-50 text-center">
@@ -57,6 +89,17 @@ const Results = ({
           {Math.round(seconds)}s
         </p>
       </div>
+      {!isLoggedin && (
+        <p className="italic text-clr-100 font-xs flex items-center">
+          <button
+            onClick={() => navigate("/signin")}
+            className="text-clr-400 capitalize pr-2 p-1 italic rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none flex flex-col items-center"
+          >
+            Sign in
+          </button>{" "}
+          to save results.
+        </p>
+      )}
       <div className="flex gap-4">
         <button
           onClick={() => {

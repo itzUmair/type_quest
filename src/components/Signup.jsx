@@ -61,14 +61,9 @@ const Signup = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        await response.user.setSuccess("Account created successfully!");
+        await createUserWithEmailAndPassword(auth, email, password);
+        setSuccess("Account created successfully!");
       } catch (error) {
-        console.log(error.code);
         if (error.code === "auth/email-already-in-use") {
           setError("Email already in use.");
         } else {

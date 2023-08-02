@@ -25,12 +25,15 @@ const Signin = () => {
 
   const validateForm = () => {
     if (!email.length) {
+      setIsLoading(false);
       setError("Email is required");
       return false;
     } else if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      setIsLoading(false);
       setError("Invalid email address");
       return false;
     } else if (!password.length) {
+      setIsLoading(false);
       setError("Password is required");
       return false;
     } else if (
@@ -38,6 +41,7 @@ const Signin = () => {
         password
       )
     ) {
+      setIsLoading(false);
       setError(
         "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character"
       );
@@ -49,9 +53,9 @@ const Signin = () => {
   const login = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    if (!validateForm()) return;
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response.user);
+      await signInWithEmailAndPassword(auth, email, password);
       // const userData = {
       //   uid: response.user.uid,
       //   email: response.user.email,
@@ -126,7 +130,7 @@ const Signin = () => {
             }}
             className="underline cursor-pointer"
           >
-            Sign in
+            Sign up
           </button>
         </p>
       </form>
