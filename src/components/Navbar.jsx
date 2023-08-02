@@ -31,7 +31,12 @@ const Navbar = () => {
       <div className="flex">
         {isLogin ? (
           <ul className="flex gap-4">
-            <li className="cursor-pointer">dashboard</li>
+            <li
+              className="cursor-pointer"
+              onClick={() => navigate("/dashboard")}
+            >
+              dashboard
+            </li>
             <li className="cursor-pointer" onClick={logOut}>
               logout
             </li>
