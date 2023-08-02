@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 
-const Results = ({ testStats, testConfig, setIsTestComplete }) => {
+const Results = ({
+  testStats,
+  testConfig,
+  setIsTestComplete,
+  setIsUpdateSetting,
+}) => {
   const seconds = (testStats.endTime - testStats.startTime) / 1000;
   const minutes = seconds / 60;
   const WPM = testConfig.length / minutes;
@@ -58,7 +63,13 @@ const Results = ({ testStats, testConfig, setIsTestComplete }) => {
         >
           Next test <span className="text-2xs">(enter)</span>
         </button>
-        <button className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none flex flex-col items-center">
+        <button
+          onClick={() => {
+            setIsTestComplete(false);
+            setIsUpdateSetting(true);
+          }}
+          className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none flex flex-col items-center"
+        >
           Test settings <span className="text-2xs">(shift)</span>
         </button>
       </div>

@@ -11,6 +11,7 @@ const Type = () => {
   const [isUpdateSetting, setIsUpdateSetting] = useState(false);
   const [regenTest, setRegenTest] = useState(0);
   const [isTestComplete, setIsTestComplete] = useState(false);
+  const [isTestStarted, setIsTestStarted] = useState(false);
   const regenRef = useRef(null);
   const startTimeRef = useRef(0);
   const endTimeRef = useRef(0);
@@ -53,6 +54,7 @@ const Type = () => {
     }
     if (currentKeyIndex === 0 && startTimeRef.current === 0) {
       startTimeRef.current = Date.now();
+      setIsTestStarted(true);
     }
 
     if (e.key === "Backspace") {
@@ -188,7 +190,21 @@ const Type = () => {
       >
         <>
           <div className="flex flex-col justify-center items-center h-60vh">
-            <div className="text-clr-100/40 tablet:w-10/12 mobile:text-2xl mobile:px-4 tablet:text-3xl my-4 tablet:px-16 flex flex-wrap justify-center">
+            <div className="flex gap-4 bg-clr-690 px-4 py-2">
+              <p className="text-clr-100/60">
+                Mode:{" "}
+                <span className=" text-clr-100 font-bold">
+                  {testConfig.mode}
+                </span>
+              </p>
+              <p className="text-clr-100/60">
+                Words:{" "}
+                <span className=" text-clr-100 font-bold">
+                  {testConfig.length}
+                </span>
+              </p>
+            </div>
+            <div className="text-clr-100/40 tablet:w-10/12 mobile:text-2xl mobile:px-4 tablet:text-3xl my-24 tablet:px-16 flex flex-wrap justify-center">
               {test.split(" ").map((word, index) => (
                 <span key={index} className="flex flex-wrap">
                   {word.split("").map((letter, index) => (
@@ -203,6 +219,11 @@ const Type = () => {
                 </span>
               ))}
             </div>
+            {!isTestStarted && (
+              <p className="text-clr-100 text-sm mb-4 font-semibold">
+                Start typing when ready.
+              </p>
+            )}
             <div className="flex gap-4">
               <button
                 onClick={() => setRegenTest((prev) => prev + 1)}
@@ -231,6 +252,7 @@ const Type = () => {
           testStats={testStats}
           testConfig={testConfig}
           setIsTestComplete={setIsTestComplete}
+          setIsUpdateSetting={setIsUpdateSetting}
         />
       </CSSTransition>
       <CSSTransition

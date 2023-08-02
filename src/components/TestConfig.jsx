@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-const TestConfig = ({ TestConfig, setIsUpdateSetting, setTestConfig }) => {
-  const [mode, setMode] = useState("normal");
-  const [length, setLength] = useState(10);
+const TestConfig = ({ testConfig, setIsUpdateSetting, setTestConfig }) => {
+  const [mode, setMode] = useState(testConfig.mode);
+  const [length, setLength] = useState(testConfig.length);
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-clr-600 w-80 p-4 layer rounded-lg">
       <h2 className="capitalize font-bold text-clr-100 text-2xl">

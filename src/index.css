@@ -5,6 +5,7 @@
 @layer base {
   html {
     @apply font-Poppins;
+    user-select: none;
   }
   body {
     @apply bg-clr-600;
