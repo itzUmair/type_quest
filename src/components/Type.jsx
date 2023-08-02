@@ -253,6 +253,7 @@ const Type = () => {
           testConfig={testConfig}
           setIsTestComplete={setIsTestComplete}
           setIsUpdateSetting={setIsUpdateSetting}
+          setIsTestStarted={setIsTestStarted}
         />
       </CSSTransition>
       <CSSTransition

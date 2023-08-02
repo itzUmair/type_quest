@@ -5,6 +5,7 @@ const Results = ({
   testConfig,
   setIsTestComplete,
   setIsUpdateSetting,
+  setIsTestStarted,
 }) => {
   const seconds = (testStats.endTime - testStats.startTime) / 1000;
   const minutes = seconds / 60;
@@ -58,7 +59,10 @@ const Results = ({
       </div>
       <div className="flex gap-4">
         <button
-          onClick={() => setIsTestComplete(false)}
+          onClick={() => {
+            setIsTestComplete(false);
+            setIsTestStarted(false);
+          }}
           className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none flex flex-col items-center"
         >
           Next test <span className="text-2xs">(enter)</span>
@@ -67,6 +71,7 @@ const Results = ({
           onClick={() => {
             setIsTestComplete(false);
             setIsUpdateSetting(true);
+            setIsTestStarted(false);
           }}
           className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none flex flex-col items-center"
         >

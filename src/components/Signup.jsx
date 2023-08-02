@@ -1,15 +1,17 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase.config.js";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import Logo from "../assets/logo.svg";
+import { useState } from "react";
 
-const Signin = () => {
+const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,6 +20,8 @@ const Signin = () => {
       setEmail(e.target.value);
     } else if (e.target.name === "password") {
       setPassword(e.target.value);
+    } else if (e.target.name === "confirmPassword") {
+      setConfirmPassword(e.target.value);
     } else {
       return;
     }
@@ -42,30 +46,34 @@ const Signin = () => {
         "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character"
       );
       return false;
+    } else if (!confirmPassword.length) {
+      setError("Please confirm your password");
+      return false;
+    } else if (confirmPassword !== password) {
+      setError("Passwords do not match");
+      return false;
     }
     return true;
   };
 
-  const login = async (e) => {
-    e.preventDefault();
+  const authenticate = async (e) => {
     setIsLoading(true);
-    try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response.user);
-      // const userData = {
-      //   uid: response.user.uid,
-      //   email: response.user.email,
-      // };
-      // localStorage.setItem("userID", JSON.stringify(userData));
-      setIsLoading(false);
-      navigate("/");
-    } catch (error) {
-      if (error.code === "auth/wrong-password") {
-        setError("Incorrect password");
-      } else if (error.code === "auth/user-not-found") {
-        setError("No account with this email was found.");
-      } else {
-        setError("Something went wrong! Please try again.");
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const response = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        await response.user.setSuccess("Account created successfully!");
+      } catch (error) {
+        console.log(error.code);
+        if (error.code === "auth/email-already-in-use") {
+          setError("Email already in use.");
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
       }
     }
     setIsLoading(false);
@@ -75,7 +83,7 @@ const Signin = () => {
     <div className="flex items-center justify-center">
       <form className="flex flex-col gap-4 items-center justify-center py-8 w-1/4">
         <img src={Logo} alt="" className="w-10 mb-16" />
-        <h2 className="font-semibold text-clr-400 text-3xl">Sign In</h2>
+        <h2 className="font-semibold text-clr-400 text-3xl">Sign Up</h2>
         <input
           type="email"
           placeholder="Email"
@@ -94,6 +102,15 @@ const Signin = () => {
           required
           className="px-4 py-2 w-full rounded text-clr-600 border-none outline-clr-400 outline-1"
         />
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Confirm Password"
+          onChange={handleChange}
+          name="confirmPassword"
+          value={confirmPassword}
+          required
+          className="px-4 py-2 w-full rounded text-clr-600 border-none outline-clr-400 outline-1"
+        />
         <div
           className="text-clr-400 text-sm self-end cursor-pointer italic"
           onClick={(e) => {
@@ -108,21 +125,33 @@ const Signin = () => {
             {error}
           </p>
         )}
-
+        {success && (
+          <p className="text-sm text-red-500">
+            {success}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/signin");
+              }}
+            >
+              Sign in
+            </button>
+          </p>
+        )}
         <button
           type="submit"
-          onClick={login}
+          onClick={authenticate}
           disabled={isLoading}
           className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none w-full"
         >
-          {isLoading ? "Signing in..." : "Sign in"}
+          {isLoading ? "Signing up..." : "Sign up"}
         </button>
         <p className="text-clr-100">
-          Don&apos;t have an account?&nbsp;
+          Already have an account?&nbsp;
           <button
             onClick={(e) => {
               e.preventDefault();
-              navigate("/signup");
+              navigate("/signin");
             }}
             className="underline cursor-pointer"
           >
@@ -134,4 +163,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Signup;
