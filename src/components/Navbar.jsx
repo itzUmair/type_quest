@@ -52,7 +52,7 @@ const Navbar = () => {
             <li className="text-clr-100"> {isLogin.email}</li>
           </ul>
         ) : (
-          <ul>
+          <ul className="flex gap-4">
             <li
               className="cursor-pointer hover:text-clr-400 focus:text-clr-400"
               onClick={() => navigate("/")}
