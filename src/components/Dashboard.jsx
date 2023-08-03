@@ -76,7 +76,7 @@ const Dashboard = () => {
         setIsLoading(false);
         return;
       }
-      setResults(docSnap.data().results);
+      setResults(docSnap.data().results.reverse());
       calculateStats(docSnap.data().results);
       setIsLoading(false);
     };
