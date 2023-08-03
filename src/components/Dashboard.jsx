@@ -149,11 +149,14 @@ const Dashboard = () => {
       ) : (
         <>
           <Navbar />
-          <h1 className="text-clr-100 font-bold text-3xl ml-16">Dashboard</h1>
-          <p className="text-clr-100 text-lg ml-16">
-            Signed in as:{" "}
-            <span className="font-bold underline italic">{user.email}</span>
-          </p>
+          <header className="ml-16 my-8">
+            <h1 className="text-clr-100 font-bold text-3xl ">Dashboard</h1>
+            <p className="text-clr-100 text-lg">
+              Signed in as:{" "}
+              <span className="font-bold underline italic">{user.email}</span>
+            </p>
+          </header>
+
           <div className="flex flex-col items-center justify-center my-8 px-16">
             <ResponsiveContainer
               width="100%"
