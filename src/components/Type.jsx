@@ -15,7 +15,6 @@ const Type = () => {
   const regenRef = useRef(null);
   const startTimeRef = useRef(0);
   const endTimeRef = useRef(0);
-  const [isLoading, setIsLoading] = useState(true);
   const [testStats, setTestStats] = useState({
     mistakes: 0,
     correct: 0,
@@ -101,6 +100,8 @@ const Type = () => {
   const generateTest = (length, wordsArray) => {
     resetColors();
     setKeysDown([]);
+    startTimeRef.current = 0;
+    endTimeRef.current = 0;
     const randomWords = [];
     for (let i = 0; i < length; i++) {
       const index = generateRandomIndex(wordsArray.length);
