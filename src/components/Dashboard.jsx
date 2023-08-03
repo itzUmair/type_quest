@@ -2,13 +2,11 @@ import { useState, useEffect, useMemo } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, database } from "../firebase/firebase.config";
-import { useTable } from "react-table";
 import {
   LineChart,
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
@@ -21,57 +19,6 @@ const Dashboard = () => {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const yAxisTicks = [0, 50, 100];
-
-  const data = useMemo(() => results, []);
-  const columns = useMemo(
-    () => [
-      {
-        Header: "WPM",
-        accessor: (row) => {
-          const seconds = (row.endTime - row.startTime) / 1000;
-          const minutes = seconds / 60;
-          return Math.round(row.length / minutes);
-        },
-      },
-      {
-        Header: "Accuracy",
-        accessor: "acc",
-      },
-      {
-        Header: "Mode",
-        accessor: "mode",
-      },
-      {
-        Header: "Correct",
-        accessor: "correct",
-      },
-      {
-        Header: "Wrong",
-        accessor: "left",
-      },
-      {
-        Header: "Words",
-        accessor: "length",
-      },
-      {
-        Header: "Mistakes",
-        accessor: "mistakes",
-      },
-      {
-        Header: "Total time (seconds)",
-        accessor: (row) => {
-          const startTime = row.startTime;
-          const endTime = row.endTime;
-
-          return Math.round((endTime - startTime) / 1000);
-        },
-      },
-    ],
-    []
-  );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
 
   useEffect(() => {
     const getResults = async (user) => {
@@ -185,34 +132,57 @@ const Dashboard = () => {
                 />
               </LineChart>
             </ResponsiveContainer>
-            <table {...getTableProps()}>
-              <thead>
-                {headerGroups.map((headerGroup, index) => (
-                  <tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                    {headerGroup.headers.map((column, index) => (
-                      <th {...column.getHeaderProps()} key={index}>
-                        {column.render("Header")}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {rows.map((row, index) => {
-                  prepareRow(row);
-                  return (
-                    <tr {...row.getRowProps()} key={index}>
-                      {row.cells.map((cell, index) => (
-                        <td {...cell.getCellProps()} key={index}>
-                          {" "}
-                          {cell.render("Cell")}{" "}
-                        </td>
-                      ))}
+            <div>
+              {!isLoading && (
+                <table className="w-full text-sm text-gray-500 text-center rounded">
+                  <thead className="text-xs uppercase bg-clr-700 text-clr-100 ">
+                    <tr>
+                      <th className="px-6 py-3">WPM</th>
+                      <th className="px-6 py-3">Accuracy</th>
+                      <th className="px-6 py-3">Words</th>
+                      <th className="px-6 py-3">Mistakes</th>
+                      <th className="px-6 py-3">Total time</th>
+                      <th className="px-6 py-3">Date</th>
+                      <th className="px-6 py-3">Mode</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody className="text-clr-100">
+                    {results.map((result, index) => (
+                      <tr
+                        key={index}
+                        className={
+                          index % 2
+                            ? "bg-clr-690 border-b border-clr-400"
+                            : "bg-clr-650 border-b border-clr-400"
+                        }
+                      >
+                        <td className="px-6 py-4 font-medium whitespace-nowrap">
+                          {Math.round(
+                            result.length /
+                              ((result.endTime - result.startTime) / 60000)
+                          )}
+                        </td>
+                        <td className=" px-6 py-4">
+                          {Math.round(result.acc)}%
+                        </td>
+                        <td className=" px-6 py-4">{result.length}</td>
+                        <td className=" px-6 py-4">{result.mistakes}</td>
+                        <td className="px-6 py-4">
+                          {Math.round(
+                            (result.endTime - result.startTime) / 1000
+                          )}
+                          s
+                        </td>
+                        <td className="px-6 py-4">
+                          {new Date(result.startTime).toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4">{result.mode}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </>
       )}
