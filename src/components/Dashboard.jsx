@@ -19,6 +19,72 @@ const Dashboard = () => {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const yAxisTicks = [0, 50, 100];
+  const [stats, setStats] = useState({
+    avgWPM: 0,
+    avgACC: 0,
+    bestWPM: 0,
+    bestACC: 0,
+    favMODE: "N/A",
+    totalTIME: 0,
+    totalWORDS: 0,
+    totalMISTAKES: 0,
+  });
+
+  const calculateStats = (results) => {
+    let avgWPM = 0;
+    let avgACC = 0;
+    let bestWPM = [];
+    let bestACC = [];
+    let favMODE = [];
+    let totalTIME = 0;
+    let totalWORDS = 0;
+    let totalMISTAKES = 0;
+
+    function maxEL(array) {
+      if (array.length === 0) return null;
+      let modeMap = {};
+      let maxEl = array[0];
+      let maxCount = 1;
+      for (let i = 0; i < array.length; i++) {
+        let el = array[i];
+        if (modeMap[el] == null) modeMap[el] = 1;
+        else modeMap[el]++;
+        if (modeMap[el] > maxCount) {
+          maxEl = el;
+          maxCount = modeMap[el];
+        }
+      }
+      return maxEl;
+    }
+
+    results.forEach((result) => {
+      avgWPM += Math.round(
+        result.length / ((result.endTime - result.startTime) / 60000)
+      );
+      avgACC += Math.round(result.acc);
+      bestWPM.push(
+        Math.round(
+          result.length / ((result.endTime - result.startTime) / 60000)
+        )
+      );
+      bestACC.push(result.acc);
+      totalTIME += result.endTime - result.startTime;
+      totalMISTAKES += result.mistakes;
+      totalWORDS += parseInt(result.length);
+      favMODE.push(result.mode);
+    });
+
+    setStats({
+      avgWPM: Math.round(avgWPM / results.length),
+      avgACC: Math.round(avgACC / results.length),
+      bestWPM: Math.max(...bestWPM),
+      bestACC: Math.max(...bestACC),
+      favMODE: maxEL(favMODE),
+      totalTIME: new Date(totalTIME).toISOString().slice(11, 19),
+      totalWORDS,
+      totalMISTAKES,
+    });
+  };
 
   useEffect(() => {
     const getResults = async (user) => {
@@ -26,6 +92,7 @@ const Dashboard = () => {
       const docRef = doc(database, "users", user.uid);
       const docSnap = await getDoc(docRef);
       setResults(docSnap.data().results);
+      calculateStats(docSnap.data().results);
       setIsLoading(false);
     };
     onAuthStateChanged(auth, (user) => {
@@ -81,12 +148,14 @@ const Dashboard = () => {
       ) : (
         <>
           <Navbar />
-          <h1 className="text-clr-100 font-semibold text-3xl ml-16">
-            Dashboard
-          </h1>
-          <div className="flex flex-col items-center justify-center">
+          <h1 className="text-clr-100 font-bold text-3xl ml-16">Dashboard</h1>
+          <p className="text-clr-100 text-lg ml-16">
+            Signed in as:{" "}
+            <span className="font-bold underline italic">{user.email}</span>
+          </p>
+          <div className="flex flex-col items-center justify-center my-8 px-16">
             <ResponsiveContainer
-              width="80%"
+              width="100%"
               height={250}
               className="bg-clr-690 p-4"
             >
@@ -132,7 +201,7 @@ const Dashboard = () => {
                 />
               </LineChart>
             </ResponsiveContainer>
-            <div>
+            <div className="my-8 w-full">
               {!isLoading && (
                 <table className="w-full text-sm text-gray-500 text-center rounded">
                   <thead className="text-xs uppercase bg-clr-700 text-clr-100 ">
@@ -183,6 +252,48 @@ const Dashboard = () => {
                 </table>
               )}
             </div>
+          </div>
+          <div className="grid grid-cols-4 grid-rows-2 px-16 gap-4 my-8">
+            <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
+              <p className="text-clr-100/60 text-sm">Average WPM</p>
+              <p className="text-clr-100 font-bold text-2xl">{stats.avgWPM}</p>
+            </span>
+            <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
+              <p className="text-clr-100/60 text-sm">Average Accuracy</p>
+              <p className="text-clr-100 font-bold text-2xl">{stats.avgACC}%</p>
+            </span>
+            <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
+              <p className="text-clr-100/60 text-sm">Best WPM</p>
+              <p className="text-clr-100 font-bold text-2xl">{stats.bestWPM}</p>
+            </span>
+            <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
+              <p className="text-clr-100/60 text-sm">Best Accuracy</p>
+              <p className="text-clr-100 font-bold text-2xl">
+                {stats.bestACC}%
+              </p>
+            </span>
+            <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
+              <p className="text-clr-100/60 text-sm">Total typing time</p>
+              <p className="text-clr-100 font-bold text-2xl">
+                {stats.totalTIME}
+              </p>
+            </span>
+            <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
+              <p className="text-clr-100/60 text-sm">Total words typed</p>
+              <p className="text-clr-100 font-bold text-2xl">
+                {stats.totalWORDS}
+              </p>
+            </span>
+            <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
+              <p className="text-clr-100/60 text-sm">Total mistakes</p>
+              <p className="text-clr-100 font-bold text-2xl">
+                {stats.totalMISTAKES}
+              </p>
+            </span>
+            <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
+              <p className="text-clr-100/60 text-sm">Favorite moded</p>
+              <p className="text-clr-100 font-bold text-2xl">{stats.favMODE}</p>
+            </span>
           </div>
         </>
       )}

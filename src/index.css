@@ -34,3 +34,14 @@
 .layer {
   box-shadow: 0 0 0 9999px rgba(3, 76, 57, 0.5);
 }
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+::-webkit-scrollbar-track {
+  background-color: #d5dfe5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ffcf00;
+}
