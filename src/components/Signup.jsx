@@ -121,9 +121,10 @@ const Signup = () => {
           </p>
         )}
         {success && (
-          <p className="text-sm text-red-500">
+          <p className="text-sm text-green-500 bg-clr-100 w-full text-center py-2">
             {success}
             <button
+              className="underline"
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/signin");

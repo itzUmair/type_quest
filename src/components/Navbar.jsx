@@ -30,27 +30,29 @@ const Navbar = () => {
       </p>
       <div className="flex">
         {isLogin ? (
-          <ul className="flex gap-4">
-            <li
-              className="cursor-pointer hover:text-clr-400 focus:text-clr-400"
-              onClick={() => navigate("/")}
-            >
-              type
-            </li>
-            <li
-              className="cursor-pointer hover:text-clr-400 focus:text-clr-400"
-              onClick={() => navigate("/dashboard")}
-            >
-              dashboard
-            </li>
-            <li
-              className="cursor-pointer hover:text-clr-400 focus:text-clr-400"
-              onClick={logOut}
-            >
-              logout
-            </li>
-            <li className="text-clr-100"> {isLogin.email}</li>
-          </ul>
+          <>
+            <ul className={"gap-4 mobile:hidden tablet:flex"}>
+              <li
+                className="cursor-pointer hover:text-clr-400 focus:text-clr-400"
+                onClick={() => navigate("/")}
+              >
+                type
+              </li>
+              <li
+                className="cursor-pointer hover:text-clr-400 focus:text-clr-400"
+                onClick={() => navigate("/dashboard")}
+              >
+                dashboard
+              </li>
+              <li
+                className="cursor-pointer hover:text-clr-400 focus:text-clr-400"
+                onClick={logOut}
+              >
+                logout
+              </li>
+              <li className="text-clr-100"> {isLogin.email}</li>
+            </ul>
+          </>
         ) : (
           <ul className="flex gap-4">
             <li
