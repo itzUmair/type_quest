@@ -1,42 +1,12 @@
 import { useState } from "react";
 
 const TestConfig = ({ testConfig, setIsUpdateSetting, setTestConfig }) => {
-  const [mode, setMode] = useState(testConfig.mode);
   const [length, setLength] = useState(testConfig.length);
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-clr-600 w-80 p-4 layer rounded-lg">
       <h2 className="capitalize font-bold text-clr-100 text-2xl">
         Test Settings
       </h2>
-      <p className="text-clr-100 mt-4">Select Mode</p>
-      <div className="flex items-center gap-2">
-        <input
-          type="radio"
-          name="modes"
-          id="normal"
-          value="normal"
-          checked={mode === "normal"}
-          onChange={(e) => setMode(e.target.value)}
-          className="w-4 h-4 bg-clr-100 border-clr-300 focus:ring-clr-400 accent-clr-400"
-        />
-        <label htmlFor="normal" className="text-clr-100 capitalize">
-          normal
-        </label>
-      </div>
-      <div className="flex items-center gap-2">
-        <input
-          type="radio"
-          name="modes"
-          id="time"
-          value="time"
-          checked={mode === "time"}
-          onChange={(e) => setMode(e.target.value)}
-          className="w-4 h-4 bg-clr-100 border-clr-300 focus:ring-clr-400 accent-clr-400"
-        />
-        <label htmlFor="time" className="text-clr-100 capitalize">
-          time
-        </label>
-      </div>
       <label
         htmlFor="length"
         className=" mt-4 text-sm font-medium text-clr-100 flex justify-between items-center pr-4"
@@ -59,7 +29,6 @@ const TestConfig = ({ testConfig, setIsUpdateSetting, setTestConfig }) => {
         <button
           onClick={() => {
             setTestConfig({
-              mode,
               length,
             });
             setIsUpdateSetting(false);

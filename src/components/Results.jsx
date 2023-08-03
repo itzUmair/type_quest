@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, database } from "../firebase/firebase.config.js";
 import { useNavigate } from "react-router-dom";
-import { collection, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  updateDoc,
+  arrayUnion,
+  setDoc,
+} from "firebase/firestore";
 
 const Results = ({
   testStats,
@@ -44,7 +50,16 @@ const Results = ({
           }),
         });
       } catch (error) {
-        console.error("Error adding new item to the array:", error);
+        try {
+          await setDoc(doc(database, "users", uid), {
+            results: arrayUnion({
+              ...testStats,
+              ...testConfig,
+            }),
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
     pushResults(uid);
@@ -68,10 +83,7 @@ const Results = ({
           <span className="text-clr-100/60 text-sm ">Words:</span>
           {testConfig.length}
         </p>
-        <p className="bg-clr-690 rounded-md gap-4 p-4 text-clr-100 text-xl flex flex-col justify-center items-center">
-          <span className="text-clr-100/60 text-sm ">Mode:</span>
-          {testConfig.mode}
-        </p>
+
         <p className="bg-clr-690 rounded-md gap-4 p-4 text-clr-100 text-xl flex flex-col justify-center items-center">
           <span className="text-clr-100/60 text-sm ">Accuracy:</span>
           {Math.round(testStats.acc)}%

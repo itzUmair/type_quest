@@ -13,18 +13,19 @@ import {
 } from "recharts";
 
 import { Loader, Navbar, Footer, Table } from "../components";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [user, setUser] = useState([]);
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const yAxisTicks = [0, 50, 100];
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     avgWPM: 0,
     avgACC: 0,
     bestWPM: 0,
     bestACC: 0,
-    favMODE: "N/A",
     totalTIME: 0,
     totalWORDS: 0,
     totalMISTAKES: 0,
@@ -35,27 +36,9 @@ const Dashboard = () => {
     let avgACC = 0;
     let bestWPM = [];
     let bestACC = [];
-    let favMODE = [];
     let totalTIME = 0;
     let totalWORDS = 0;
     let totalMISTAKES = 0;
-
-    function maxEL(array) {
-      if (array.length === 0) return null;
-      let modeMap = {};
-      let maxEl = array[0];
-      let maxCount = 1;
-      for (let i = 0; i < array.length; i++) {
-        let el = array[i];
-        if (modeMap[el] == null) modeMap[el] = 1;
-        else modeMap[el]++;
-        if (modeMap[el] > maxCount) {
-          maxEl = el;
-          maxCount = modeMap[el];
-        }
-      }
-      return maxEl;
-    }
 
     results.forEach((result) => {
       avgWPM += Math.round(
@@ -71,7 +54,6 @@ const Dashboard = () => {
       totalTIME += result.endTime - result.startTime;
       totalMISTAKES += result.mistakes;
       totalWORDS += parseInt(result.length);
-      favMODE.push(result.mode);
     });
 
     setStats({
@@ -79,7 +61,6 @@ const Dashboard = () => {
       avgACC: Math.round(avgACC / results.length),
       bestWPM: Math.max(...bestWPM),
       bestACC: Math.max(...bestACC),
-      favMODE: maxEL(favMODE),
       totalTIME: new Date(totalTIME).toISOString().slice(11, 19),
       totalWORDS,
       totalMISTAKES,
@@ -91,6 +72,10 @@ const Dashboard = () => {
       setIsLoading(true);
       const docRef = doc(database, "users", user.uid);
       const docSnap = await getDoc(docRef);
+      if (!docSnap.data()) {
+        setIsLoading(false);
+        return;
+      }
       setResults(docSnap.data().results);
       calculateStats(docSnap.data().results);
       setIsLoading(false);
@@ -145,7 +130,7 @@ const Dashboard = () => {
     <>
       {isLoading ? (
         <Loader />
-      ) : (
+      ) : results.length ? (
         <>
           <Navbar />
           <header className="ml-16 my-8">
@@ -252,6 +237,19 @@ const Dashboard = () => {
           </div>
           <Footer />
         </>
+      ) : (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center flex-col">
+          <p className=" text-center text-clr-400 text-2xl">
+            No records found on this account! Attempt some typing tests to see
+            records.
+          </p>
+          <button
+            onClick={() => navigate("/")}
+            className="text-clr-400 capitalize bg-clr-690 px-4 py-2 rounded-full hover:text-clr-690 hover:bg-clr-400 focus:text-clr-690 focus:bg-clr-400 transition-all ease-in duration-300  border-none outline-none"
+          >
+            Test
+          </button>
+        </div>
       )}
     </>
   );

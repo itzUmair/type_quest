@@ -26,7 +26,6 @@ const Type = () => {
   });
   const [testConfig, setTestConfig] = useState({
     length: 20,
-    mode: "normal",
   });
   const docRef = doc(database, "words", "words_list");
 
@@ -194,12 +193,6 @@ const Type = () => {
         <>
           <div className="flex flex-col justify-center items-center h-60vh">
             <div className="flex gap-4 bg-clr-690 px-4 py-2">
-              <p className="text-clr-100/60">
-                Mode:{" "}
-                <span className=" text-clr-100 font-bold">
-                  {testConfig.mode}
-                </span>
-              </p>
               <p className="text-clr-100/60">
                 Words:{" "}
                 <span className=" text-clr-100 font-bold">

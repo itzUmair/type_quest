@@ -26,7 +26,6 @@ const Table = ({ data }) => {
             <th className="px-6 py-3">Mistakes</th>
             <th className="px-6 py-3">Total time</th>
             <th className="px-6 py-3">Date</th>
-            <th className="px-6 py-3">Mode</th>
           </tr>
         </thead>
         <tbody className="text-clr-100">
@@ -53,7 +52,6 @@ const Table = ({ data }) => {
               <td className="px-6 py-4">
                 {new Date(result.startTime).toLocaleString()}
               </td>
-              <td className="px-6 py-4">{result.mode}</td>
             </tr>
           ))}
         </tbody>
