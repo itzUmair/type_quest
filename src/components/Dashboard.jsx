@@ -136,7 +136,7 @@ const Dashboard = () => {
           <header className="ml-16 my-8">
             <h1 className="text-clr-100 font-bold text-3xl ">Dashboard</h1>
             <p className="text-clr-100 text-lg">
-              Signed in as:{" "}
+              Signed in as:
               <span className="font-bold underline italic">{user.email}</span>
             </p>
           </header>
@@ -231,8 +231,10 @@ const Dashboard = () => {
               </p>
             </span>
             <span className="flex flex-col justify-center items-center gap-4 bg-clr-690 w-full h-40 rounded-lg">
-              <p className="text-clr-100/60 text-sm">Favorite moded</p>
-              <p className="text-clr-100 font-bold text-2xl">{stats.favMODE}</p>
+              <p className="text-clr-100/60 text-sm">Total tests</p>
+              <p className="text-clr-100 font-bold text-2xl">
+                {results.length}
+              </p>
             </span>
           </div>
           <Footer />
