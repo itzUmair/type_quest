@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { database } from "../firebase/firebase.config.js";
 import { doc, getDoc } from "firebase/firestore";
 import { CSSTransition } from "react-transition-group";
-import { Results, TestConfig, Loader } from "../components";
+import { Results, TestConfig, Footer } from "../components";
 
 const Type = () => {
   const [test, setTest] = useState("");
@@ -100,6 +100,7 @@ const Type = () => {
   const generateTest = (length, wordsArray) => {
     resetColors();
     setKeysDown([]);
+    setIsTestStarted(false);
     startTimeRef.current = 0;
     endTimeRef.current = 0;
     const randomWords = [];
@@ -242,6 +243,7 @@ const Type = () => {
               </button>
             </div>
           </div>
+          <Footer />
         </>
       </CSSTransition>
       <CSSTransition

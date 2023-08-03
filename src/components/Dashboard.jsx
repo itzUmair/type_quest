@@ -11,9 +11,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import Loader from "./Loader";
-import Navbar from "./Navbar";
-import Table from "./Table";
+
+import { Loader, Navbar, Footer, Table } from "../components";
 
 const Dashboard = () => {
   const [user, setUser] = useState([]);
@@ -251,6 +250,7 @@ const Dashboard = () => {
               <p className="text-clr-100 font-bold text-2xl">{stats.favMODE}</p>
             </span>
           </div>
+          <Footer />
         </>
       )}
     </>
