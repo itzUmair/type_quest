@@ -8,3 +8,4 @@ export { default as Loader } from "./Loader";
 export { default as Table } from "./Table";
 export { default as Dashboard } from "./Dashboard";
 export { default as Footer } from "./Footer";
+export { default as ProtectedRoute } from "./ProtectedRoute";
